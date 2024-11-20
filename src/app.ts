@@ -1,25 +1,18 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
-import mongoose from 'mongoose';
-import config from './app/config';
+import { studentRoutes } from './app/modules/student/student.routes';
 const app: Application = express();
 
 //parsers
 app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 
-main().catch((err) => console.log(err));
+//application routes
+app.use('/api/v1/students', studentRoutes);
 
-async function main() {
-  try {
-    await mongoose.connect(config.database_url as string);
-
-    app.get('/', (req: Request, res: Response) => {
-      res.send(10);
-    });
-  } catch (error) {
-    console.log(error);
-  }
-}
+app.get('/', (req: Request, res: Response) => {
+  res.send('I am from Nepal');
+});
 
 export default app;
